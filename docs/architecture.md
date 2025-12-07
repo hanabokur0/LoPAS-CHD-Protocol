@@ -1,187 +1,156 @@
-LoPAS-CHD Architecture (Draft)
+LoPAS-CHD Architecture (Draft v1)
 
-This document describes the internal processing model
-used by LoPAS-CHD Evaluator.
+This document describes the minimal system architecture required to implement the LoPAS-CHD Protocol.
+It is a reference design, not a required software implementation.
 
-It is implementation-independent,
-but shows the recommended architecture design
-for external developers.
+1. Layered Architecture
 
-1. Layer Overview
+LoPAS-CHD consists of four conceptual layers:
 
-CHD Evaluator consists of 4 conceptual layers:
+┌─────────────────────────┐
+│ L4: Agent & Application │  ← AI agents / dashboards / eval tools
+├─────────────────────────┤
+│ L3: Protocol Interface  │  ← /v1/eval  /v1/health
+├─────────────────────────┤
+│ L2: Cognitive Scoring   │  ← DoQ / CCI / RDI / HRI / TRS / SCI …
+├─────────────────────────┤
+│ L1: Controlled Hallucination Design
+└─────────────────────────┘
 
-Raw Text
+2. Data Flow Overview
+Text Input
    ↓
-Ingestion Layer
+Preprocess (language detection / tokenization)
    ↓
-Semantic Layer
+Cognitive Scoring (Indicators)
    ↓
-Indicator Layer
+CHD Adjustment (hallucination control)
    ↓
-Response Layer
+Normalization (0.00–1.00)
+   ↓
+JSON Output
 
-2. Ingestion Layer
+3. Module Components
+Text Intake
 
-Responsibilities:
+Language auto-detection
 
-language detection
+Tokenization
 
-tokenization
+Context attachment (optional)
 
-segmentation
+Indicator Engine
 
-safety filter
+DoQ (Density of Questions)
 
-minimal normalization
+CCI (Connectivity)
 
-Output:
+RDI (Reasoning divergence)
 
-{
-  "lang": "ja",
-  "tokens": [...],
-  "sentences": [...],
-}
+HRI (Hypothesis reframing)
 
-3. Semantic Layer
+TRS (Resonant value)
 
-Responsibilities:
+SCI (collapse probability)
 
-topic detection
+RVI (restoration value)
 
-concept extraction
+AHI (altruism harvest)
 
-dependency relations
+CDI, NSRI (optional)
 
-clustering
+CHD Layer
 
-summary
+Controlled Hallucination Design
 
-narrative mode
+Safety framing
 
-Output:
+Scaling
 
-{
-  "clusters": [...],
-  "dependencies": [...],
-  "topics": [...]
-}
+Interpretive stability
 
-4. Indicator Layer
+Anti-drift heuristics
 
-Each LoPAS indicator receives a semantic bundle
-and returns a score (0.00–1.00).
+4. Implementation Freedom
 
-Conceptual pseudocode:
+LoPAS-CHD does not define:
 
-for indicator in Indicators:
-    score[indicator] = indicator.evaluate(semantic)
+programming language
 
+hosting method
 
-Indicators work independently.
+database choice
 
-5. Response Layer
+local vs cloud
 
-Responsible for:
+GPU vs no-GPU
 
-normalization
+Any implementation is valid if:
 
-rounding
+JSON format matches
 
-JSON schema
+indicator normalization follows protocol
 
-minimal metadata
+5. Local / Edge Support
 
-Output example:
+LoPAS-CHD is designed for local evaluation, including:
 
-{
-  "version": "1.0.0",
-  "scores": {...},
-  "raw": {...}
-}
+Edge devices
 
-6. Plugin Architecture
+WASM
 
-CHD MAY accept external plugins:
+Mobile inference
 
-domain evaluators
+On-prem LLMs
 
-specific indicators
+Cloud is optional.
 
-enterprise-grade scoring
+6. Agent Integration
 
-medical ethics
+LoPAS-CHD is compatible with:
 
-socio-economic analysis
+OpenAI Assistants
 
-research modes
+Claude Tools
 
-locality or culture analysis
+Gemini Functions
 
-7. Edge-First Design
+MCP Servers
 
-CHD is designed for edge-first deployment:
+Agent frameworks
 
-Cloudflare Workers
+Agents simply call /v1/eval.
 
-wasm
+7. Minimal Requirements
 
-local inference
+Accept text input
 
-offline mode
+Output JSON indicators
 
-minimal resources
+Expose /v1/health
 
-privacy-friendly
+Normalize 0–1
 
-low cost
+MUST preserve meaning context
 
-8. Cloud Execution
+Everything else is implementation detail.
 
-Recommended:
+8. Version Note
 
-Cloudflare
+Architecture v1.0
+Protocol v1.0
+Indicators v1.0
 
-Vercel
+Pull Requests Welcome
 
-Fly.io
+This is a living document.
 
-FastAPI
+Contributions:
 
-Serverless
+diagrams
 
-Docker
+local implementations
 
-No vendor lock-in.
+wasm versions
 
-9. Privacy by Design
-
-CHD does not require storing raw text:
-
-streaming in
-
-scoring
-
-discard input
-
-output only normalized scores
-
-Optional:
-
-anonymization
-
-no persistent logs
-
-10. Future Expansion
-
-real-time stream scoring
-
-wasm evaluator
-
-edge micro-clusters
-
-sovereign deployments
-
-independent CHD agents
-
-fully local LoPAS nodes
+multi-modal extensions
