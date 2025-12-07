@@ -134,3 +134,144 @@ External implementation examples will be linked in future versions.
 - Draft: v0.1  
 - Author: hanabokur0  
 - License: MIT
+
+LoPAS-CHD Protocol — Scoring Specification
+1. Score Range
+
+すべての指標は以下の範囲に正規化される。
+
+0.00 ≤ score ≤ 1.00
+
+2. Score Levels
+Range	Label	Interpretation
+0.00–0.29	Collapse	Structural collapse / cognitive breakdown
+0.30–0.59	Transitional	Recoverable / dialog possible
+0.60–0.79	Intelligent	Structured / cooperative / synthesis begins
+0.80–1.00	Resonant	Civilization-design / collective re-framing
+3. Alignment Interpretation
+Collapse
+
+zero connectivity
+
+emotional dominance
+
+tribal response
+
+violent escalation risk
+
+Transitional
+
+hypothesis appears
+
+partial branching
+
+minimal reflection
+
+Intelligent
+
+branching inquiry
+
+reframing capacity
+
+multi-perspective synthesis
+
+Resonant
+
+structural self-repair
+
+civilization-level design
+
+long-term recovery path
+
+4. General Formula (normalized)
+score = clamp((raw - min) / (max - min), 0, 1)
+
+
+※実装自由。ただし正規化結果の範囲は固定。
+
+5. Aggregated Score
+
+CHDは個別指標の集合体であり、
+総合スコア＝任意である（実装側に委譲）。
+
+例（推奨・任意）：
+
+CHD = mean([DoQ, CCI, RDI, HRI, TRS, SCI, RVI, AHI])
+
+6. Implementation Independence
+
+CHDは「算出方法」を規定しない。
+
+embedding
+
+statistical model
+
+rule-based
+
+LLM
+
+hybrid
+
+symbolic
+
+edge-only
+
+どれでもOK。結果フォーマットだけがCHD。
+
+7. Required Output Fields
+
+返すJSONには必ず以下を含むこと：
+
+{
+  "version": "≥1.0",
+  "scores": {
+    "DoQ": 0.00-1.00,
+    "CCI": ...,
+    "RDI": ...,
+    "HRI": ...,
+    "TRS": ...,
+    "SCI": ...,
+    "RVI": ...,
+    "AHI": ...
+  }
+}
+
+8. Optional Metadata
+{
+  "lang": "ja|en|auto",
+  "timestamp": "",
+  "input_tokens": 1234,
+  "model": "optional"
+}
+
+9. Time-series
+
+CHDは単発ではなく系列で解釈することを推奨する。
+
+t0 → t1 → t2
+
+
+特に
+
+RDI
+
+HRI
+
+TRS
+
+SCI
+
+は時間軸で本領を発揮する。
+
+10. Independence from sentiment analysis
+
+CHDは
+
+positive / negative
+
+happy / sad
+
+right / wrong
+
+を評価せず、
+構造・価値・共鳴のみ測定する。
