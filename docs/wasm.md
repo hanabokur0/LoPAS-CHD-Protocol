@@ -1,99 +1,151 @@
-LoPAS-CHD — WASM / Edge Target (Draft)
+LoPAS-CHD WASM Runtime (Draft)
 
-LoPAS-CHD Protocol is designed to be compiled to
-WebAssembly (WASM) and executed on edge runtimes.
+This document describes how LoPAS-CHD can be compiled and executed as WASM
+(WebAssembly) for browser-native and edge environments.
 
-1. Design Goal
+1. Purpose
 
-zero-install
+The WASM target enables LoPAS to run:
 
-low latency
+without cloud servers
 
-low memory footprint
+without Python/Node environments
 
-cross-platform
+inside browsers
 
-browser-compatible
+on mobile
 
-serverless ready
+offline
 
-offline-capable
+inside secure sandboxes
 
-2. Recommended Runtimes
+WASM = zero-install LoPAS evaluator.
 
-Suggested targets:
+LoPAS becomes a universal cognitive layer without platform control.
 
-Cloudflare Workers (WASM-native)
+2. Goals
 
-Deno Deploy
+WASM build MUST:
 
-Fastly Compute
+compile core scoring logic
 
-Vercel Edge
+expose a JS callable function
 
-Wasmer
+return normalized indicator scores (0.00–1.00)
 
-Wasmtime
+run without external network calls
 
-Browser WebAssembly
-
-No vendor lock-in required.
-
-3. Minimal Requirements
-
-no persistent storage required
-
-no heavyweight model loading
-
-core logic < 200 KB compiled
-
-no GPU dependency
-
-uses text-only inference
-
-language auto-detection included
-
-4. Why WASM
-
-Because LoPAS-CHD is intended to run as a local thinking companion
-and not only as a remote SaaS.
-
-Expected benefits:
-
-local privacy
-
-local cost reduction
-
-local sovereignty
-
-latency < 20ms
-
-deployable anywhere
-
-5. Browser Mode
-
-CHD MAY be embedded inside:
-
-Chrome extensions
-
-Edge extensions
-
-Firefox extensions
-
-local file analyzers
-
-chat UI wrappers
-
-knowledge assistants
-
-6. Future
-
-Planned optional builds:
-
-WASM SIMD optimization
-
-on-device ML tiny models
+Optional goals:
 
 streaming tokenizer
 
-“LoPAS Local Agent Mode”
+local CHD model adaptation
+
+on-device embedding pipelines
+
+3. Minimal API shape
+JS usage
+import { evalLoPAS } from "./lopas.wasm"
+
+const scores = await evalLoPAS("your text here")
+console.log(scores)
+
+Output
+{
+  "DoQ": 0.71,
+  "CCI": 0.63,
+  "TRS": 0.77,
+  ...
+}
+
+4. Exported WASM Functions
+
+MUST provide:
+
+Function	Description
+evalLoPAS(text)	returns core scores
+evalRaw(text)	optional raw metadata
+health()	returns status
+5. Runtime Environments
+
+Target runtime compatibility:
+
+Chrome/Firefox/Safari
+
+Edge WebView2
+
+ChromeOS
+
+WebKit mobile
+
+Android browser
+
+Electron
+
+Tauri
+
+Capacitor
+
+Cloudflare Workers
+
+Bun
+
+Deno
+
+(Node optional, not required)
+
+6. Privacy Benefits (Core to LoPAS Philosophy)
+
+Running LoPAS locally in WASM enables:
+
+fully private reflection
+
+no data sharing
+
+self-assessment
+
+sovereign cognitive evaluation
+
+zero corporate dependence
+
+This is the intended design of LoPAS as a local civilization protocol.
+
+7. Security Notes
+
+WASM MUST NOT:
+
+send text externally
+
+fetch external models automatically
+
+log raw text by default
+
+phone home
+
+Security should be local-first, user-controlled.
+
+8. Future Directions
+
+Edge LoPAS cluster mesh
+
+WASM-SIMD optimization
+
+quantized CHD filters
+
+offline embeddings
+
+LoPAS in AR browsers
+
+micro-hydropower local nodes
+
+robot-side evaluation
+
+on-board neural regulation (NSRI integration)
+
+License
+
+MIT (same as parent repository)
+
+Contribution
+
+PRs welcome (especially wasm/edge specialists).
