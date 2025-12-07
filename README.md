@@ -125,3 +125,18 @@ civilization is designable
 If you want an agent, there are thousands of repos.
 If you want a protocol for thinking,
 you’re in the right place.
+
+## ⚖️ License & Manifesto
+
+1. **Open Source Protocol**
+   This protocol is free for everyone—individuals, companies, and governments.
+   No patents, no exclusivity. Use it to expand your cognition.
+
+2. **No "Official" Authority**
+   There is no "Official LoPAS Consultant" or "Certified LoPAS Instructor."
+   Anyone claiming to have exclusive rights or official authority is fake.
+   The authority lies only in the depth of your thinking (DoQ).
+
+3. **Citation**
+   If you implement this protocol, please cite "LoPAS-CHD Protocol" and its origin.
+   Respect the spirit of “Civilizational OS” over profit maximization.
