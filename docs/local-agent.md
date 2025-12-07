@@ -1,123 +1,183 @@
-LoPAS-CHD Local Agent Integration (Draft)
+Local-Agent Integration (LoPAS-CHD v1)
 
-Local AI Agents (GPT-based, Claude-based, Gemini-based, LLaMA-based etc.)
-MAY integrate LoPAS-CHD for thinking-loop control.
+This document describes how local AI agents (desktop LLMs, on-device inference, MCP servers, etc.) should call LoPAS-CHD.
 
-1. Goal
+Goal:
+Run cognitive evaluation locally, without cloud dependency, improving privacy, safety, and edge autonomy.
 
-LoPAS-CHD enables a local agent to:
+1. Definition
 
-Detect thinking quality
+A LoPAS-Local-Agent is:
 
-Control hallucination balance (EFI)
+Any module that runs LoPAS-CHD evaluation locally
+and exposes the /v1/eval interface to other tools.
 
-Add constructive friction (CFI)
+2. Minimum Agent Responsibilities
 
-Respect silence (QSI)
+A LoPAS-Local-Agent MUST:
 
-Maintain structural realism (SCI)
+Accept raw text
 
-Sustain meaning flow (AHI, TRS)
+Run LoPAS-CHD scoring
 
-Local agent becomes a thinking partner, not an automated worker.
+Normalize into 0.00–1.00 outputs
 
-2. Minimal Requirements
+Return JSON
 
-Any agent implementation MUST:
+Provide /v1/health
 
-send text to /v1/eval
+A LoPAS-Local-Agent MAY also:
 
-read scores from response
+expose UI
 
-adjust next output behavior
+store evaluation history
 
-Every loop:
+provide local caching
 
-input → eval → adjust → output
+offer WASM bindings
 
+3. Example Local Agent (flow)
+User text
+  ↓
+Desktop LLM (OpenAI / Claude Desktop / LM Studio / Ollama)
+  ↓
+Local LoPAS Scoring Engine (wasm or python)
+  ↓
+JSON output
 
-No additional SDK required.
+4. Local Agent Interfaces
+Accepts:
+{
+  "text": "...",
+  "options": {}
+}
 
-3. Loop Example
-user: "冬のミカンって何？"
+Returns:
+{
+  "DoQ": 0.71,
+  "CCI": 0.63,
+  "TRS": 0.77,
+  ...
+}
 
-agent:
-  call /v1/eval(text)
+5. Agent Implementations
 
-LoPAS-CHD result:
-  QSI high → wait
-  EFI moderate → add analogy
-  SCI high → keep realism
+Suggested implementations:
 
+Python CLI
 
-Then agent responds:
+Rust binary
 
-slower (QSI)
+Node CLI
 
-with metaphor (EFI)
+WASM (browser/local)
 
-but grounded (SCI)
+Electron app
 
-4. Local First
+Cloudflare Worker (offline mode)
 
-LoPAS-CHD encourages local-first thinking agents:
+Local MCP server
 
-local memory
+All are valid if they follow the protocol.
 
-local decision
+6. Desktop Agent Use Cases
 
-minimal cloud dependency
+Writer / researcher evaluation
 
-privacy by design
+Philosophical dialog agents
 
-sovereign personal AI
+MCP desktop integration
 
-LoPAS is a user-first protocol, not a centralized service.
+classroom personal AI
 
-5. “CAA Mode”
+therapy / reflection tools
 
-A local agent MAY implement CAA (Creativity Amplifier Agent):
+safe policy / public decision
 
-Commander mode (balance)
+mental health (NSRI mode)
 
-Chaos mode (EFI↑)
+disaster reflection logs
 
-Editor mode (CFI↑)
+creative production feedback
 
-Observer mode (QSI↑)
+7. Edge Autonomy Philosophy
 
-Analyst mode (SCI↑)
+LoPAS is not centralized AI.
+Agents should be able to run:
 
-CAA is a configuration, not another product.
+without cloud
 
-6. Multi-Model Orchestration
+without large GPU
 
-Local agent MAY use multiple models:
+with small models
 
-GPT (grounded reasoning)
+with browser WASM only
 
-Claude (reflection)
+inside community infrastructure
 
-Gemini (creative angle)
+(this is the core difference from corporate AI)
 
-LLaMA (local control)
+8. Privacy & Safety Advantages
 
-LoPAS sits above models:
-“Thinking OS” not “model wrapper”.
+Local LoPAS enables:
 
-7. Next Step
+private cognitive evaluation
 
-To build a real agent:
+no cloud dependency
 
-implement thinking-loop
+no identity exposure
 
-call LoPAS-CHD API
+no corporate filtering
 
-adjust behavior on each turn
+educational accessibility
 
-record self-changes
+individual self-improvement
 
-allow user override
+rural & offline use
 
-Do NOT seek “correct answers.”
-Seek “better thinking.”
+9. Minimal Example (pseudo code)
+POST("/v1/eval", async (req) => {
+  const text = req.body.text
+  const result = LoPAS.eval(text)
+  return json(result)
+})
+
+10. Future Extensions
+
+voice agent
+
+AR agent
+
+robot interface
+
+emotion sensors
+
+autonomous CHD tuning
+
+local multi-LLM orchestration
+
+neural fatigue adaptation (NSRI)
+
+community-LoPAS clusters
+
+sovereign civic AI frameworks
+
+License
+
+MIT (same as parent repository)
+
+Contribution Policy
+
+Pull Requests welcome:
+
+edge builds
+
+wasm ports
+
+MCP scripts
+
+language bindings
+
+lightweight models
+
+embedded boards
